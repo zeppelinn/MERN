@@ -20,6 +20,9 @@ const User = mongoose.model('user', new mongoose.Schema({
 //     if(!err){ console.log(doc)}else{console.log('User create failed ---> ', err)};
 // })
 
+// User.remove({_id:"5b97c4c322332b7cd19a198a"}, (err) => {
+//     console.log(err);
+// })
 // 新建app
 const app = express();
 
