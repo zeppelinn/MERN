@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom';
 import Auth from './Auth';
 import Dashboard from './Dashboard';
+import './config';
 
 const store = createStore(reducer, compose(
     applyMiddleware(thunk),
