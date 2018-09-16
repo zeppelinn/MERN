@@ -2488,7 +2488,23 @@ If you have ideas for more “How To” recipes that should be on this page, [le
 启动本地mongodb服务
 mongod --config /usr/local/etc/mongod.conf 
 
+对antd的组件进行按需加载
+npm install babel-plugin-import --save
+在package.json的plugins中添加
+[
+  "import",
+  {
+    "libraryName":"antd-mobile",
+    "style":"css"
+  }
+]
+
 安装支持装饰器的插件
 npm install babel-plugin-transform-decorators-legacy --save
+在package.json的plugins中添加"transform-decorators-legacy"
 
 使用axios来发送异步请求
+在package.json中添加"proxy":"http://localhost:9390"可以实现express服务(3000)跨域访问mongodb服务(9093)
+
+用户登录基于cookie验证
+express依赖cookie-parser，使用npm install cookie-parser安装

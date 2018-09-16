@@ -8,29 +8,33 @@ import reducer from './reducer'
 import { 
     BrowserRouter, 
     Route, 
-    Redirect, 
-    Switch 
 } from 'react-router-dom';
-import Auth from './Auth';
-import Dashboard from './Dashboard';
 import './config';
+import Login from './container/login/login';
+import Register from './container/register/register';
+import 'antd-mobile/dist/antd-mobile.css'
+import AuthRoute from './component/authroute/authroute';
 
 const store = createStore(reducer, compose(
     applyMiddleware(thunk),
     window.devToolsExtension() ? window.devToolsExtension() : () => {}
 ));
 
-console.log(store.getState());
+const Boss = () => {
+    return <div>
+        test
+    </div>
+}
 
 ReactDom.render(
     (<Provider store={store}>
         <BrowserRouter>
-        <Switch>
-                {/* 被包含在Switch组件中的Router组件们，当路由匹配到一个则不再往下匹配 */}
-            <Route path='/login' component={Auth}/>
-            <Route path='/dashboard' component={Dashboard}/>
-            <Redirect to='/dashboard' />
-        </Switch>
+        <div>
+            <AuthRoute></AuthRoute>
+            <Route path='boss' component={Boss}/>
+            <Route path='/login' component={Login}/>
+            <Route path='/register' component={Register}/>
+        </div>
         </BrowserRouter>
     </Provider>),
     document.getElementById('root')
