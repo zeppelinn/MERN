@@ -21,7 +21,7 @@ export default class AuthRoute extends React.Component{
         // 获取用户信息
         axios.get('/user/info')
             .then(result => {
-                if(result.status === 200){
+                if(result.status === 200 && result.code === 0){
                     // 登录成功
                 }else{
                     // 登录失败,则跳转到登录页
