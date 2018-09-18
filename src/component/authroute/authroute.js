@@ -2,8 +2,14 @@ import React from 'react';
 import axios from 'axios';
 
 import { withRouter } from 'react-router-dom';
+import { loadData } from '../../redux/user.redux';
+import { connect } from 'react-redux'
 // 使用withRouter标记之后，可以获取到this.props.history对象，以及其中的方法(go, goBack, goForward...)
 @withRouter
+@connect(
+    state => state.user,
+    { loadData }
+)
 
 export default class AuthRoute extends React.Component{
     constructor(props){
@@ -21,8 +27,10 @@ export default class AuthRoute extends React.Component{
         // 获取用户信息
         axios.get('/user/info')
             .then(result => {
-                if(result.status === 200 && result.code === 0){
+                // 判断地址/user/info是否有效，并且用户是否携带了cookie(在user.js中会判断并校验cookie信息，如果校验通过会返回{code:0})
+                if(result.status === 200 && result.data.code === 0){
                     // 登录成功
+                    this.props.loadData(result.data.data);
                 }else{
                     // 登录失败,则跳转到登录页
                     this.props.history.push('/login');

@@ -5,6 +5,7 @@ const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 const LONGIN_SUCCESS = 'LOGIN_SUCCESS';
 const ERROR_MSG = 'ERROR_MSG';
 const CLEAN_STATE = 'CLEAN_STATE';
+const LOAD_DATA = 'LOAD_DATA';
 
 const initState = {
     redirectTo:'',
@@ -25,6 +26,8 @@ export const user = (state = initState, action) => {
             return {...state, isAuth:true, ...action.payload, msg:'', redirectTo:getRedirectPath(action.payload)};
         case CLEAN_STATE:
             return {...initState};
+        case LOAD_DATA:
+            return {...state, ...action.payload}
         default:
             return state;
     }
@@ -44,6 +47,10 @@ const loginSuccess = (data) => {
 
 export const cleanState = () => {
     return {type:CLEAN_STATE};
+}
+
+export const loadData = (userInfo) => {
+    return {type:LOAD_DATA, payload:userInfo}
 }
 
 export const register = ({user, pwd, repeatPwd, type}) => {
