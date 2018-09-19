@@ -5,7 +5,8 @@ import {
     InputItem,
     WingBlank,
     WhiteSpace,
-    Button
+    Button,
+    Flex
 } from 'antd-mobile';
 import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux'
@@ -67,13 +68,15 @@ export default class Login extends Component {
                         密码
                     </InputItem>
                 </List>
-                <Button type='primary' onClick={this.handleLogin}>
-                    登录
-                </Button>
-                <WhiteSpace/>
-                <Button onClick={this.register} type='primary' >
-                    注册
-                </Button>
+                <Flex direction='row' justify='center' >
+                    <Button style={{marginLeft:20, marginRight:20, width:160, marginTop:20}} onClick={this.register} type='primary' >
+                        注册
+                    </Button>
+                    <Button style={{marginLeft:20, marginRight:20, marginTop:20,width:160}} type='primary' onClick={this.handleLogin}>
+                        登录
+                    </Button>
+                    <WhiteSpace/>
+                </Flex>
             </WingBlank>
         </div>
         )

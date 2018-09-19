@@ -1,15 +1,13 @@
 import axios from "axios";
 import { getRedirectPath } from "../util";
 
-const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-const LONGIN_SUCCESS = 'LOGIN_SUCCESS';
 const ERROR_MSG = 'ERROR_MSG';
 const CLEAN_STATE = 'CLEAN_STATE';
 const LOAD_DATA = 'LOAD_DATA';
+const AUTH_SUCCESS = 'AUTH_SUCCESS';
 
 const initState = {
     redirectTo:'',
-    isAuth:false,
     msg:'',
     user:'',
     pwd:'',
@@ -18,12 +16,10 @@ const initState = {
 
 export const user = (state = initState, action) => {
     switch (action.type) {
-        case REGISTER_SUCCESS:
-            return {...state, msg:'', isAuth:true, ...action.payload, redirectTo:getRedirectPath(action.payload)};
+        case AUTH_SUCCESS:
+            return {...state, msg:'', ...action.payload, redirectTo:getRedirectPath(action.payload)};
         case ERROR_MSG:
-            return {...state, msg:action.error, isAuth:false};
-        case LONGIN_SUCCESS:
-            return {...state, isAuth:true, ...action.payload, msg:'', redirectTo:getRedirectPath(action.payload)};
+            return {...state, msg:action.error,};
         case CLEAN_STATE:
             return {...initState};
         case LOAD_DATA:
@@ -33,16 +29,13 @@ export const user = (state = initState, action) => {
     }
 }
 
+const authSuccess = (obj) => {
+    const {pwd, _id, ...data} = obj
+    return {type:AUTH_SUCCESS, payload:data};
+}
+
 const errorMsg = (error) => {
     return {error, type:ERROR_MSG};
-}
-
-const regitserSuccess = (data) => {
-    return {type:REGISTER_SUCCESS, payload:data};
-}
-
-const loginSuccess = (data) => {
-    return {type:LONGIN_SUCCESS, payload:data};
 }
 
 export const cleanState = () => {
@@ -61,7 +54,7 @@ export const register = ({user, pwd, repeatPwd, type}) => {
         axios.post('/user/register', {user, pwd, type})
             .then(res => {
                 if(res.status === 200 && res.data.code === 0){
-                    dispatch(regitserSuccess({user, pwd, type}))
+                    dispatch(authSuccess({user, pwd, type}))
                 }else{
                     dispatch(errorMsg(res.data.msg))
                 }
@@ -75,7 +68,20 @@ export const login = ({user, pwd}) => {
         axios.post('/user/login', {user, pwd})
             .then(res => {
                 if (res.status === 200 && res.data.code === 0) {
-                    dispatch(loginSuccess(res.data.data))
+                    dispatch(authSuccess(res.data.data))
+                }else{
+                    dispatch(errorMsg(res.data.msg));
+                }
+            })
+    }
+}
+
+export const updateBossInfo = (data) => {
+    return dispatch => {
+        axios.post('/user/update', data)
+            .then(res => {
+                if (res.status === 200 && res.data.code === 0) {
+                    dispatch(authSuccess(res.data.data))
                 }else{
                     dispatch(errorMsg(res.data.msg));
                 }
