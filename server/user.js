@@ -7,6 +7,19 @@ const utils = require('utility');
 // 为数据库查询结果添加过滤条件，不显示加密的密码和版本号
 const _filter = {pwd:0, '__v':0}
 
+Router.post('/update', (req, res) => {
+    const userid = req.cookies.userid;
+    if(!userid) return res.json({code:1})
+    const body = req.body;
+    User.findByIdAndUpdate(userid, body, (err, doc) => {
+        const data = Object.assign({}, {
+            user:doc.user,
+            type:doc.type
+        }, body)
+        return res.json({code:0, data})
+    });
+});
+
 Router.get('/list', (req, res) => {
     User.find({}, (err, doc) => {
         return res.json(doc);

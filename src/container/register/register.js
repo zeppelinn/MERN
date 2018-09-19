@@ -46,7 +46,7 @@ export default class Register extends Component {
 			<div>
 				{this.props.redirectTo ? <Redirect to={this.props.redirectTo} ></Redirect> : null}
 				<Logo></Logo>
-				<List>
+				<List style={{marginLeft:15, marginRight:15}} >
 					{this.props.msg ?  <p className="error_msg">{this.props.msg}</p> : null }
 					<InputItem 
 						onChange={text => this.updateState({'user':text})}
@@ -78,9 +78,8 @@ export default class Register extends Component {
 					>
 						招聘
 					</RadioItem>
-					<WhiteSpace/>
-					<Button type='primary' onClick={() => this.handleRegister()}>注册</Button>
 				</List>
+				<Button style={{marginTop:20, marginLeft:30, marginRight:30}} type='primary' onClick={() => this.handleRegister()}>注册</Button>
 			</div>
 		)
 	}
