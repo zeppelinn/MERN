@@ -28,7 +28,7 @@ export default class AvatarSelector extends Component {
                     <span style={{fontSize:20, marginRight:20}} >
                         已选择头像
                     </span>
-                    <img style={{width:18, height:18, alignItems:'center'}} src={this.state.icon}/>
+                    <img style={{width:18, height:18, alignItems:'center'}} src={this.state.icon} alt={this.state.mDesc} />
                 </div>):
                 (<div>
                     <span style={{fontSize:20}}>请选择头像</span>
