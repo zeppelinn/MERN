@@ -59,7 +59,6 @@ export default class Bossinfo extends Component {
             <TextareaItem 
                 onChange = {text => this.updateState('desc', text)}
                 rows={3}
-                autoHeight
                 title='职位要求'
             >
             </TextareaItem>

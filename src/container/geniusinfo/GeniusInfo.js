@@ -50,8 +50,7 @@ export default class GeniusInfo extends Component {
             </InputItem>
             <TextareaItem 
                 onChange = {text => this.updateState('desc', text)}
-                rows={3}
-                autoHeight
+                rows={5}
                 title='个人简介'
             >
             </TextareaItem>
