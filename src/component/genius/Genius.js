@@ -5,6 +5,13 @@ import {
     WhiteSpace,
     WingBlank
 } from 'antd-mobile'
+import { connect } from 'react-redux';
+import { getUserList } from '../../redux/chatuser.redux';
+
+@connect(
+    state => state.chatTarget,
+    {getUserList}
+)
 
 export default class Boss extends Component {
 
@@ -22,12 +29,7 @@ export default class Boss extends Component {
     }
 
     componentDidMount = () =>  {
-        axios.get('/user/list?type=boss')
-            .then(res => {
-                this.updateState({
-                    data:res.data
-                })
-            })
+        this.props.getUserList('boss')
     }
 
     render() {
@@ -36,7 +38,7 @@ export default class Boss extends Component {
         const Body = Card.Body
         return (
             <WingBlank>
-                {this.state.data.map(v => (
+                {this.props.userList.map(v => (
                     v.avatar ? 
                     (<div style={{paddingTop:15}} key={v.title}>
                         <Card>
