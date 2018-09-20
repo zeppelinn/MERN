@@ -5,7 +5,8 @@ import {
     InputItem,
     WhiteSpace,
 	Button,
-	Radio
+	Radio,
+	WingBlank
 } from 'antd-mobile';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -46,39 +47,41 @@ export default class Register extends Component {
 			<div>
 				{this.props.redirectTo ? <Redirect to={this.props.redirectTo} ></Redirect> : null}
 				<Logo></Logo>
-				<List style={{marginLeft:15, marginRight:15}} >
-					{this.props.msg ?  <p className="error_msg">{this.props.msg}</p> : null }
-					<InputItem 
-						onChange={text => this.updateState({'user':text})}
-					>
-						用户名
-					</InputItem>
-					<InputItem
-						type='password'
-						onChange={text => this.updateState({'pwd':text})}
-					>
-						密码
-					</InputItem>
-					<InputItem
-						type='password'
-						onChange={text => this.updateState({'repeatPwd':text})}
-					>
-						确认密码
-					</InputItem>
-					<WhiteSpace/>
-					<RadioItem 
-						checked={this.state.type === 'genius'} 
-						onChange={() => this.updateState({'type':'genius'})}
-					>
-						求职
-					</RadioItem>
-					<RadioItem 
-						checked={this.state.type === 'boss'} 
-						onChange={() => this.updateState({'type':'boss'})}
-					>
-						招聘
-					</RadioItem>
-				</List>
+				<WingBlank>
+					<List>
+						{this.props.msg ?  <p className="error_msg">{this.props.msg}</p> : null }
+						<InputItem 
+							onChange={text => this.updateState({'user':text})}
+						>
+							用户名
+						</InputItem>
+						<InputItem
+							type='password'
+							onChange={text => this.updateState({'pwd':text})}
+						>
+							密码
+						</InputItem>
+						<InputItem
+							type='password'
+							onChange={text => this.updateState({'repeatPwd':text})}
+						>
+							确认密码
+						</InputItem>
+						<WhiteSpace/>
+						<RadioItem 
+							checked={this.state.type === 'genius'} 
+							onChange={() => this.updateState({'type':'genius'})}
+						>
+							求职
+						</RadioItem>
+						<RadioItem 
+							checked={this.state.type === 'boss'} 
+							onChange={() => this.updateState({'type':'boss'})}
+						>
+							招聘
+						</RadioItem>
+					</List>
+				</WingBlank>
 				<Button style={{marginTop:20, marginLeft:30, marginRight:30}} type='primary' onClick={() => this.handleRegister()}>注册</Button>
 			</div>
 		)

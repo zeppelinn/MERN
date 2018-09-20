@@ -16,6 +16,7 @@ import BossInfo from './container/bossinfo/BossInfo'
 import GeniusInfo from './container/geniusinfo/GeniusInfo'
 import 'antd-mobile/dist/antd-mobile.css'
 import AuthRoute from './component/authroute/authroute';
+import DashBoard from './component/dashboard/DashBoard';
 
 const store = createStore(reducer, compose(
     applyMiddleware(thunk),
@@ -32,6 +33,7 @@ ReactDom.render(
                 <Route path='/geniusinfo' component={GeniusInfo}/>
                 <Route path='/login' component={Login}/>
                 <Route path='/register' component={Register}/>
+                <Route component={DashBoard}/>
             </Switch>
         </div>
         </BrowserRouter>

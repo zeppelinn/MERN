@@ -21,7 +21,9 @@ Router.post('/update', (req, res) => {
 });
 
 Router.get('/list', (req, res) => {
-    User.find({}, (err, doc) => {
+    const {type} = req.query;
+    const condition = type ? {type} : {}
+    User.find(condition, _filter, (err, doc) => {
         return res.json(doc);
     })
 });
