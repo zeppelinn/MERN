@@ -11,26 +11,23 @@ import {
 import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux'
 import { login, cleanState } from '../../redux/user.redux';
+import formModel from '../../component/formModel/formModel';
 
 @connect(
     state => state.user,
     {login, cleanState}
 )
-
+@formModel
 export default class Login extends Component {
     constructor(props){
         super(props);
-        this.state = {
-            user:'',
-            pwd:''
-        }
         this.register = this.register.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
         this.cleanState = this.cleanState.bind(this);
     }
 
     handleLogin = () => {
-        this.props.login(this.state);
+        this.props.login(this.props.state);
     }
 
     register = () => {
@@ -42,11 +39,6 @@ export default class Login extends Component {
         this.props.cleanState();
     }
 
-    updateState = (dict) => {
-        if(!this) return ;
-        this.setState(dict);
-    }
-
     render() {
         return (
         <div>
@@ -56,14 +48,14 @@ export default class Login extends Component {
             <WingBlank>
                 <List>
                     <InputItem
-                        onChange={text => this.updateState({user:text})}
+                        onChange={text => this.props.handleInputChange('user',text)}
                     >
                         用户
                     </InputItem>
                     <WhiteSpace/>
                     <InputItem
                         type='password'
-                        onChange={text => this.updateState({pwd:text})}
+                        onChange={text => this.props.handleInputChange('pwd',text)}
                     >
                         密码
                     </InputItem>
