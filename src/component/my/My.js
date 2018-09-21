@@ -7,10 +7,12 @@ import {
     Modal,
 } from 'antd-mobile'
 import browserCookies from 'browser-cookies';
+import { handleLogout } from '../../redux/user.redux';
+import { Redirect } from 'react-router-dom';
 
 @connect(
     state => state.user,
-
+    {handleLogout}
 )
 
 export default class My extends Component {
@@ -25,12 +27,14 @@ export default class My extends Component {
         const mAlert = Modal.alert;
         mAlert('注销', '确认退出？', [
             {text:'取消', onPress: () => {}},
-            {text:'确认', onPress: () => {}}
+            {text:'确认', onPress: () => {
+                // 直接删除当前的cookie，简单粗暴
+                browserCookies.erase('userid');
+                this.props.handleLogout();
+            }}
         ])
 
 
-        // // 直接删除当前的cookie，简单粗暴
-        // browserCookies.erase('userid');
     }
 
     render() {
@@ -64,6 +68,6 @@ export default class My extends Component {
                     </ListItem>
                 </List>
             </div>
-        ) : null
+        ) : <Redirect to={props.redirectTo} ></Redirect>
     }
 }

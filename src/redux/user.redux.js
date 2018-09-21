@@ -5,6 +5,7 @@ const ERROR_MSG = 'ERROR_MSG';
 const CLEAN_STATE = 'CLEAN_STATE';
 const LOAD_DATA = 'LOAD_DATA';
 const AUTH_SUCCESS = 'AUTH_SUCCESS';
+const LOG_OUT = 'LOG_OUT';
 
 const initState = {
     redirectTo:'',
@@ -23,7 +24,9 @@ export const user = (state = initState, action) => {
         case CLEAN_STATE:
             return {...initState};
         case LOAD_DATA:
-            return {...state, ...action.payload}
+            return {...state, ...action.payload};
+        case LOG_OUT:
+            return {...initState, redirectTo:'/login'}
         default:
             return state;
     }
@@ -44,6 +47,10 @@ export const cleanState = () => {
 
 export const loadData = (userInfo) => {
     return {type:LOAD_DATA, payload:userInfo}
+}
+
+export const handleLogout = () => {
+    return {type:LOG_OUT}
 }
 
 export const register = ({user, pwd, repeatPwd, type}) => {
