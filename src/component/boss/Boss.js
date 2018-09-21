@@ -7,6 +7,7 @@ import {
 } from 'antd-mobile'
 import { connect } from 'react-redux';
 import { getUserList } from '../../redux/chatuser.redux';
+import UserInfo from '../userinfo/UserInfo';
 
 @connect(
     state => state.chatTarget,
@@ -33,31 +34,6 @@ export default class Boss extends Component {
     }
 
     render() {
-        console.log(this.state);
-        const Header = Card.Header
-        const Body = Card.Body
-        return (
-            <WingBlank>
-                {this.props.userList.map(v => (
-                    v.avatar ? 
-                    (<div style={{paddingTop:15}} key={v.title}>
-                        <Card>
-                            <Header
-                                title={v.user}
-                                thumb={require(`../../res/images/${v.avatar}.png`)}
-                                extra={<span>{v.title}</span>}
-                            />
-                            <Body style={{marginLeft:5}} >
-                                {v.desc.split('\n').map(v => (
-                                    <div key={v}>{v}</div>
-                                ))}
-                            </Body>
-                        </Card>
-                        <WhiteSpace/>
-                    </div>) :
-                    null
-                ))}
-            </WingBlank>
-        )
+        return <UserInfo userList = {this.props.userList} />
     }
 }
