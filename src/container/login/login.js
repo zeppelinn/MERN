@@ -50,7 +50,7 @@ export default class Login extends Component {
     render() {
         return (
         <div>
-            {this.props.redirectTo ? <Redirect to={this.props.redirectTo} ></Redirect> : null}
+            {this.props.redirectTo && this.props.redirectTo !== '/login' ? <Redirect to={this.props.redirectTo} ></Redirect> : null}
             <Logo></Logo>
             {this.props.msg ?  <p className="error_msg">{this.props.msg}</p> : <p className="error_msg"></p> }
             <WingBlank>
