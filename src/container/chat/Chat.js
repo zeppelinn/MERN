@@ -3,7 +3,8 @@ import io from 'socket.io-client';
 import {
     List,
     InputItem,
-    NavBar
+    NavBar,
+    Icon
 } from 'antd-mobile'
 import { connect } from 'react-redux';
 import { IPADDR } from '../../config';
@@ -37,36 +38,50 @@ export default class Chat extends Component {
         })
     }
 
-    componentDidMount() {
-        this.props.getMsgList();
-        this.props.receiveMsg();
+    componentDidMount = () => {
+        console.log(this.props);
+        if(!this.props.chat.chatmsg.length){
+            this.props.getMsgList();
+            this.props.receiveMsg();
+        }
     }
 
     render() {
-        const user = this.props.match.params.user;
+        const userId = this.props.match.params.user;
         const Item = List.Item;
+        const users = this.props.chat.users;
+        if(!users[userId]){
+            return null;
+        }
         return (
             <div id='chat-page'>
-                <NavBar mode='dark' >
-                    {user}
+                <NavBar 
+                    mode='dark'
+                    icon={<Icon type='left' />}
+                    onLeftClick={() => {
+                        this.props.history.goBack();
+                    }}
+                >
+                    {users[userId].name}
                 </NavBar>
-                {this.props.chat.chatmsg.map(v => (
-                    v.from === user ? 
+                {this.props.chat.chatmsg.map(v => {
+                    const avatar = require(`../../res/images/${users[v.from].avatar}.png`)
+                    return v.from === userId ? 
                         (
                             <List key={v._id} >
-                                <Item>
+                                <Item thumb={avatar} >
                                     {v.content}
                                 </Item>
                             </List>
                         ):
                         (
                             <List key={v._id} >
-                                <Item extra={'avatar'} className='chat-me' >
+                                <Item extra={<img src={avatar} />} className='chat-me' >
                                     {v.content}
                                 </Item>
                             </List>
                         )
-                    ))}
+                    })}
                 <div className="stick-footer">
                     <List>
                         <InputItem

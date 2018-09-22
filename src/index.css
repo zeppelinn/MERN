@@ -9,7 +9,7 @@
 	position: fixed;
 	bottom: 0;
 	width: 100%;
-	height:auto;
+	height: 53px!important;
 }
 .fixd-header.am-navbar{
 	position: fixed;

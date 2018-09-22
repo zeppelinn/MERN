@@ -67,12 +67,17 @@ Router.get('/info', (req, res) => {
 Router.get('/getmsglist', (req, res) => {
     // 从cookie中获取当前用户信息(userid)
     const user = req.cookies.userid;
-    // 匹配多个条件查询使用$or来区别条件
-    const filter = {'$or':[{from:user, to:user}]};
-    Chat.find({}, (err, docs) => {
-        if(!err){
-            return res.json({code:0, msgs:docs})
-        }
+
+    User.find({}, (e, userdoc) => {
+        let users = {};
+        userdoc.forEach(v => {
+            users[v._id] = {name:v.user, avatar:v.avatar}
+        })
+        Chat.find({'$or':[{from:user}, {to:user}]}, (err, docs) => {
+            if(!err){
+                return res.json({code:0, msgs:docs, users:users})
+            }
+        })
     })
 });
 
