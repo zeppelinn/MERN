@@ -4,16 +4,21 @@ import {
     List,
     InputItem,
 } from 'antd-mobile'
+import { connect } from 'react-redux';
+import { IPADDR } from '../../config';
+import { getMsgList } from '../../redux/chat.redux';
 
 // 前端在3000端口，服务器端口在9093，需要跨域，手动配置绑定地址
-const socket =  io('ws://192.168.1.108:9093');
-// const socket =  io('ws://localhost:9093');
+const socket =  io(`ws://${IPADDR}:9093`);
 
-
+@connect(
+    state => state,
+    {getMsgList}
+)
 export default class Chat extends Component {
-
     constructor(props){
         super(props);
+        
         this.state = {
             text:'',
             msg:[]
@@ -29,12 +34,15 @@ export default class Chat extends Component {
     }
 
     componentDidMount() {
-        socket.on('recvmsg', (data) => {
-            this.setState({
-                msg:[...this.state.msg, data.text]
-            })
-            console.log(data.text);
-        })
+
+        this.props.getMsgList();
+
+        // socket.on('recvmsg', (data) => {
+        //     this.setState({
+        //         msg:[...this.state.msg, data.text]
+        //     })
+        //     console.log(data.text);
+        // })
     }
 
     render() {
