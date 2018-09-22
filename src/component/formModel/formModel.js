@@ -10,7 +10,6 @@ export default function formModel(Comp){
         }
 
         handleInputChange = (k, v) => {
-            console.log('key--->', k, ' value--->', v);
             this.setState({
                 [k]: v
             })
