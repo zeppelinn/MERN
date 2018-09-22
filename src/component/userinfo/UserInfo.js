@@ -20,7 +20,7 @@ class UserInfo extends Component {
     }
 
     handleClick = (user) => {
-        this.props.history.push(`/chat/${user.user}`)
+        this.props.history.push(`/chat/${user._id}`)
     }
 
     render() {

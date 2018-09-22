@@ -2,6 +2,8 @@ const express = require('express');
 const userRouter = require('./user');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const model = require('./model');
+const Chat = model.getModel('chat');
 
 const app = express();
 // work with express
@@ -12,8 +14,12 @@ io.on(
     'connection',
     function(socket){
         socket.on('sendmsg', function(data){
-            console.log(data.text);
-            io.emit('recvmsg', data);
+            const {from, to, msg} = data;
+            // 每组聊天的唯一的id
+            const chatid = [from, to].sort().join('_');
+            Chat.create({chatid, from, to, content:msg}, (err, doc) => {
+                io.emit('recvmsg', Object.assign({}, doc._doc))
+            })
         })
     }
 )
