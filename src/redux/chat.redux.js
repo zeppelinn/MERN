@@ -36,13 +36,14 @@ const msgList = (data, users, userid) => {
 }
 
 const msgRecv = (data, userid) => {
-    return {type:MSG_RECV, payload:{data, userid}};
+    return {type:MSG_RECV, payload:data, userid};
 } 
 
 export const receiveMsg = () => {
     return (dispatch, getState) => {
         const userid = getState().user._id;
         socket.on('recvmsg', (data) => {
+            console.log('recv msg', data);
             dispatch(msgRecv(data, userid));
         })
     }

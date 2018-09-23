@@ -75,6 +75,7 @@ export default class DashBoard extends Component {
                                 key={v.path}
                                 path={v.path}
                                 component={v.component}
+                                
                             />
                         ))}
                     </Switch>

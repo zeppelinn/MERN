@@ -4,7 +4,8 @@ import {
     List,
     InputItem,
     NavBar,
-    Icon
+    Icon,
+    Grid
 } from 'antd-mobile'
 import { connect } from 'react-redux';
 import { IPADDR } from '../../config';
@@ -21,10 +22,10 @@ const socket =  io(`ws://${IPADDR}:9093`);
 export default class Chat extends Component {
     constructor(props){
         super(props);
-        
         this.state = {
             text:'',
-            msg:[]
+            msg:[],
+            showEmoji:false
         }
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -33,14 +34,21 @@ export default class Chat extends Component {
         const from = this.props.user._id;
         const to = this.props.match.params.user;
         const msg = this.state.text;
+        if(!msg || msg === '') return ;
         this.props.sendMsg({from, to, msg});
         this.setState({
-            text:''
+            text:'',
+            showEmoji:false
         })
     }
 
+    fixCarousel = () => {
+        setTimeout(function() {
+            window.dispatchEvent(new Event('resize'))
+        }, 0);
+    }
+
     componentDidMount = () => {
-        console.log(this.props);
         if(!this.props.chat.chatmsg.length){
             this.props.getMsgList();
             this.props.receiveMsg();
@@ -48,20 +56,32 @@ export default class Chat extends Component {
     }
 
     render() {
+        const emoji = '😀 😃 😄 😁 😆 😅 😂 😊 😇 🙂 🙃 😉 😌 😍 😘 😗 😙 😚 😋 😜 😝 😛 🤑 🤗 🤓 😎 😏 😒 😞 😔 😟 😕 🙁 😣 😖 😫 😩 😤 😠 😡 😶 😐 😑 😯 😦 😧 😮 😲 😵 😳 😱 😨 😰 😢 😥 😭 😓 😪 😴 🙄 🤔 😬 🤐 😷 🤒 🤕 😈 👿 👹 👺 💩 👻 💀 ☠️ 👽 👾 🤖 🎃 😺 😸 😹 😻 😼 😽 🙀 😿 😾 👐 🙌 👏 🙏 👍 👎 👊 ✊ 🤘 👌 👈 👉 👆 👇 ✋  🖐 🖖 👋  💪 🖕 ✍️  💅 🖖 💄 💋 👄 👅 👂 👃 👁 👀 '
+										.split(' ')
+										.filter(v=>v)
+                                        .map(v=>({text:v}));
+        
         const userId = this.props.match.params.user;
         const Item = List.Item;
         const users = this.props.chat.users;
         if(!users[userId]){
             return null;
         }
+        const extra = () => (
+            <div>
+                {<span style={{marginRight:'12px'}} onClick={() => {this.fixCarousel();this.setState({showEmoji:!this.state.showEmoji})}} >{'😀'}</span>}
+                {<span style={{marginBottom:'3px'}} onClick={() => this.handleSubmit()} >发送</span>}
+            </div>
+        )
         const chatid = getChatId(userId, this.props.user._id)
-        const chatmsgs = this.props.chat.chatmsg.filter(v => v.chatid === chatid)
+        const chatmsgs = this.props.chat.chatmsg.filter(v => {return v.chatid === chatid})
         return (
             <div id='chat-page'>
                 <NavBar 
                     mode='dark'
                     icon={<Icon type='left' />}
                     onLeftClick={() => {
+
                         this.props.history.goBack();
                     }}
                 >
@@ -79,7 +99,11 @@ export default class Chat extends Component {
                         ):
                         (
                             <List key={v._id} >
-                                <Item extra={<img src={avatar} />} className='chat-me' >
+                                <Item 
+                                    extra={<img src={avatar} />}
+                                    className='chat-me'
+                                    
+                                >
                                     {v.content}
                                 </Item>
                             </List>
@@ -95,11 +119,22 @@ export default class Chat extends Component {
                                     text:v
                                 })
                             }}
-                            extra={<span onClick={() => this.handleSubmit()} >发送</span>}
+                            extra={extra()}
                         >
                             信息
                         </InputItem>
                     </List>
+                    {this.state.showEmoji ? <Grid
+                        data={emoji}
+                        columnNum={9}
+                        carouselMaxRow={4}
+                        isCarousel={true}
+                        onClick={(element) => {
+                            this.setState({
+                                text:this.state.text + element.text
+                            })
+                        }}
+                    /> : null}
                 </div>
             </div>
         )
