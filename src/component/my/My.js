@@ -39,7 +39,6 @@ export default class My extends Component {
         const props = this.props;
         const ListItem = List.Item
         const Brief = List.Item.Brief
-        console.log('props.user', props.user);
         return props.user ? (
             <div>
                 <Result 

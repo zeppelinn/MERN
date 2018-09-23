@@ -21,7 +21,7 @@ export const chat = (state=initState, action) => {
         case MSG_LIST:
             return {...state, users: action.payload.users, chatmsg:action.payload.data, unread:action.payload.data.filter(v => !v.read && v.to === action.payload.userid).length}
         case MSG_RECV:
-            const unread = action.payload.to === action.userid ? 1 : 0
+        const unread = action.payload.to === action.userid ? 1 : 0
             return {...state, chatmsg:[...state.chatmsg, action.payload], unread:state.unread + unread}
         case MSG_READ:
             
@@ -41,8 +41,9 @@ const msgRecv = (data, userid) => {
 
 export const receiveMsg = () => {
     return (dispatch, getState) => {
-        const userid = getState().user._id;
         socket.on('recvmsg', (data) => {
+			// !!!!!!!!一定要注意这个，异步获取userid，否则DashBoard里的属性还没有获取到值，getState()的值全为空，所以要放到异步处理
+			const userid = getState().user._id;
             dispatch(msgRecv(data, userid));
         })
     }

@@ -64,6 +64,13 @@ Router.get('/info', (req, res) => {
     })
 });
 
+Router.get('/dele', (req, res) => {
+    Chat.remove({}, (e, d) => {
+        return res.json(d);
+    })
+});
+
+
 Router.get('/getmsglist', (req, res) => {
     // 从cookie中获取当前用户信息(userid)
     const user = req.cookies.userid;

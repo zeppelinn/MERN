@@ -81,7 +81,6 @@ export default class Chat extends Component {
                     mode='dark'
                     icon={<Icon type='left' />}
                     onLeftClick={() => {
-
                         this.props.history.goBack();
                     }}
                 >
@@ -102,7 +101,6 @@ export default class Chat extends Component {
                                 <Item 
                                     extra={<img src={avatar} />}
                                     className='chat-me'
-                                    
                                 >
                                     {v.content}
                                 </Item>

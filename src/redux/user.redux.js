@@ -21,8 +21,6 @@ export const user = (state = initState, action) => {
             return {...state, msg:'', ...action.payload, redirectTo:getRedirectPath(action.payload)};
         case ERROR_MSG:
             return {...state, msg:action.error,};
-        case CLEAN_STATE:
-            return {...initState};
         case LOAD_DATA:
             return {...state, ...action.payload};
         case LOG_OUT:
@@ -39,10 +37,6 @@ const authSuccess = (obj) => {
 
 const errorMsg = (error) => {
     return {error, type:ERROR_MSG};
-}
-
-export const cleanState = () => {
-    return {type:CLEAN_STATE};
 }
 
 export const loadData = (userInfo) => {

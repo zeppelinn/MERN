@@ -10,12 +10,12 @@ import {
 } from 'antd-mobile';
 import {Redirect} from 'react-router-dom';
 import { connect } from 'react-redux'
-import { login, cleanState } from '../../redux/user.redux';
+import { login } from '../../redux/user.redux';
 import formModel from '../../component/formModel/formModel';
 
 @connect(
     state => state.user,
-    {login, cleanState}
+    {login}
 )
 @formModel
 export default class Login extends Component {
@@ -23,7 +23,6 @@ export default class Login extends Component {
         super(props);
         this.register = this.register.bind(this);
         this.handleLogin = this.handleLogin.bind(this);
-        this.cleanState = this.cleanState.bind(this);
     }
 
     handleLogin = () => {
@@ -31,12 +30,7 @@ export default class Login extends Component {
     }
 
     register = () => {
-        this.cleanState();
         this.props.history.push('/register')
-    }
-
-    cleanState = () => {
-        this.props.cleanState();
     }
 
     render() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import { List } from 'antd-mobile';
+import { List, Badge } from 'antd-mobile';
 
 @connect(
     state => state,
@@ -13,7 +13,6 @@ export default class Msg extends Component {
     )
 
     render() {
-        console.log(this.props);
         const msgGroup = {};
         this.props.chat.chatmsg.forEach(v => {
             msgGroup[v.chatid] = msgGroup[v.chatid] || [];
@@ -25,24 +24,25 @@ export default class Msg extends Component {
         const userid = this.props.user._id;
         return (
             <div>
-                
-                    {chatList.map(v => {
-                        console.log('v======', v);
-                        const lastItem = this.getLastMsg(v);
-                        const targetId = lastItem.from === userid ? lastItem.from : lastItem.to;
-                        const userInfo = this.props.chat.users[targetId];
-                        const name = userInfo ? userInfo.name : '';
-                        const avatar = userInfo ? userInfo.avatar : '';
-                        return <List key={lastItem._id} >
+                {chatList.map(v => {
+                    const lastItem = this.getLastMsg(v);
+                    const targetId = lastItem.to === userid ? lastItem.from : lastItem.to;
+                    const unreadNum = v.filter(value => !value.read && value.to === userid).length;
+                    const userInfo = this.props.chat.users[targetId];
+                    const name = userInfo ? userInfo.name : '';
+                    const avatar = userInfo ? userInfo.avatar : '';
+                    return (
+                        <List key={lastItem._id} >
                             <Item 
+                                extra={<Badge text={unreadNum} overflowCount={99} />}
                                 thumb={<img src={require(`../../res/images/${avatar}.png`)} />}
-                            >
+                                >
                                 {lastItem.content}
                                 <Brief>{name}</Brief>
                             </Item>
                         </List>
-                    })}
-                
+                    )
+                })}
             </div>
         )
     }

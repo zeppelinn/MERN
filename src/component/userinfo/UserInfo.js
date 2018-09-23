@@ -28,9 +28,9 @@ class UserInfo extends Component {
         const Body = Card.Body;
         return (
             <WingBlank>
-                {this.props.userList.map(v => (
-                    v.avatar ? 
-                    (<div style={{paddingTop:15}} key={v.title}>
+                {this.props.userList.map(v => {
+                    return v.avatar ? 
+                    (<div style={{paddingTop:15}} key={v._id}>
                         <Card onClick={() => this.handleClick(v)} >
                             <Header
                                 title={v.user}
@@ -48,7 +48,7 @@ class UserInfo extends Component {
                         <WhiteSpace/>
                     </div>) :
                     null
-                ))}
+                })}
             </WingBlank>
         );
     }
