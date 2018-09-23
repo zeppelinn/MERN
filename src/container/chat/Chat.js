@@ -9,6 +9,7 @@ import {
 import { connect } from 'react-redux';
 import { IPADDR } from '../../config';
 import { getMsgList, sendMsg, receiveMsg } from '../../redux/chat.redux';
+import { getChatId } from '../../util';
 
 // 前端在3000端口，服务器端口在9093，需要跨域，手动配置绑定地址
 const socket =  io(`ws://${IPADDR}:9093`);
@@ -53,6 +54,8 @@ export default class Chat extends Component {
         if(!users[userId]){
             return null;
         }
+        const chatid = getChatId(userId, this.props.user._id)
+        const chatmsgs = this.props.chat.chatmsg.filter(v => v.chatid === chatid)
         return (
             <div id='chat-page'>
                 <NavBar 
@@ -64,7 +67,7 @@ export default class Chat extends Component {
                 >
                     {users[userId].name}
                 </NavBar>
-                {this.props.chat.chatmsg.map(v => {
+                {chatmsgs.map(v => {
                     const avatar = require(`../../res/images/${users[v.from].avatar}.png`)
                     return v.from === userId ? 
                         (

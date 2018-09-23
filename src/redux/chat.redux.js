@@ -19,9 +19,10 @@ const initState =  {
 export const chat = (state=initState, action) => {
     switch (action.type) {
         case MSG_LIST:
-            return {...state, users: action.payload.users, chatmsg:action.payload.data, unread:action.payload.data.filter(v => !v.read).length}
+            return {...state, users: action.payload.users, chatmsg:action.payload.data, unread:action.payload.data.filter(v => !v.read && v.to === action.payload.userid).length}
         case MSG_RECV:
-            return {...state, chatmsg:[...state.chatmsg, action.payload], unread:state.unread+1}
+            const unread = action.payload.to === action.userid ? 1 : 0
+            return {...state, chatmsg:[...state.chatmsg, action.payload], unread:state.unread + unread}
         case MSG_READ:
             
             break;
@@ -30,29 +31,31 @@ export const chat = (state=initState, action) => {
     }
 }
 
-const msgList = (data, users) => {
-    return {type:MSG_LIST, payload:{data, users}};
+const msgList = (data, users, userid) => {
+    return {type:MSG_LIST, payload:{data, users, userid}};
 }
 
-const msgRecv = (data) => {
-    return {type:MSG_RECV, payload:data};
+const msgRecv = (data, userid) => {
+    return {type:MSG_RECV, payload:{data, userid}};
 } 
 
 export const receiveMsg = () => {
-    return dispatch => {
+    return (dispatch, getState) => {
+        const userid = getState().user._id;
         socket.on('recvmsg', (data) => {
-            console.log('receive msg----->', data);
-            dispatch(msgRecv(data));
+            dispatch(msgRecv(data, userid));
         })
     }
 }
 
 export const getMsgList = () => {
-    return dispatch => {
+    // 第二个参数getState，是store.getState();
+    return (dispatch, getState) => {
         axios.get('/user/getmsglist')
             .then(res => {
                 if(res.status === 200 && res.data.code === 0){
-                    dispatch(msgList(res.data.msgs, res.data.users))
+                    const userid = getState().user._id;
+                    dispatch(msgList(res.data.msgs, res.data.users, userid))
                 }
             })
     }
