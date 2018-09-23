@@ -68,6 +68,8 @@ Router.get('/getmsglist', (req, res) => {
     // 从cookie中获取当前用户信息(userid)
     const user = req.cookies.userid;
 
+    // Chat.remove({}, (e, v) => {});
+
     User.find({}, (e, userdoc) => {
         let users = {};
         userdoc.forEach(v => {

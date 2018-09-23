@@ -71,11 +71,10 @@ export default class DashBoard extends Component {
                 <div style={{marginTop:45}} >
                     <Switch>
                         {navList.map(v => (
-                            <Route 
+                            <Route
                                 key={v.path}
                                 path={v.path}
                                 component={v.component}
-                                
                             />
                         ))}
                     </Switch>
@@ -84,4 +83,4 @@ export default class DashBoard extends Component {
             </div>
         )
     }
-}
+    }
