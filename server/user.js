@@ -2,6 +2,7 @@ const express = require('express');
 const Router = express.Router();
 const model = require('./model');
 const User = model.getModel('user');
+const Chat = model.getModel('chat');
 const utils = require('utility');
 
 // 为数据库查询结果添加过滤条件，不显示加密的密码和版本号
@@ -60,6 +61,23 @@ Router.get('/info', (req, res) => {
     User.findOne({_id:userid}, _filter, (error, doc) => {
         if(error || !doc) return res.json({code:1, msg:'后端出错'})
         return res.json({code:0, data:doc});
+    })
+});
+
+Router.get('/getmsglist', (req, res) => {
+    // 从cookie中获取当前用户信息(userid)
+    const user = req.cookies.userid;
+
+    User.find({}, (e, userdoc) => {
+        let users = {};
+        userdoc.forEach(v => {
+            users[v._id] = {name:v.user, avatar:v.avatar}
+        })
+        Chat.find({'$or':[{from:user}, {to:user}]}, (err, docs) => {
+            if(!err){
+                return res.json({code:0, msgs:docs, users:users})
+            }
+        })
     })
 });
 

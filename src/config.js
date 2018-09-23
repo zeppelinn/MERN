@@ -12,3 +12,5 @@ axios.interceptors.response.use(config => {
     Toast.hide();
     return config;
 })
+
+export const IPADDR = '192.168.0.101';

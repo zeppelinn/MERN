@@ -17,10 +17,11 @@ import GeniusInfo from './container/geniusinfo/GeniusInfo'
 import 'antd-mobile/dist/antd-mobile.css'
 import AuthRoute from './component/authroute/authroute';
 import DashBoard from './component/dashboard/DashBoard';
+import Chat from './container/chat/Chat';
 
 const store = createStore(reducer, compose(
     applyMiddleware(thunk),
-    window.devToolsExtension() ? window.devToolsExtension() : () => {}
+    window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
 ReactDom.render(
@@ -33,6 +34,7 @@ ReactDom.render(
                 <Route path='/geniusinfo' component={GeniusInfo}/>
                 <Route path='/login' component={Login}/>
                 <Route path='/register' component={Register}/>
+                <Route path='/chat/:user' component={Chat}/>
                 <Route component={DashBoard}/>
             </Switch>
         </div>

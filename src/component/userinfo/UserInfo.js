@@ -5,11 +5,22 @@ import {
     WhiteSpace,
     WingBlank
 } from 'antd-mobile'
+import { withRouter } from 'react-router-dom';
 
+@withRouter
 class UserInfo extends Component {
+
+    constructor(props){
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
 
     static propTypes = {
         userList:PropTypes.array.isRequired
+    }
+
+    handleClick = (user) => {
+        this.props.history.push(`/chat/${user._id}`)
     }
 
     render() {
@@ -20,7 +31,7 @@ class UserInfo extends Component {
                 {this.props.userList.map(v => (
                     v.avatar ? 
                     (<div style={{paddingTop:15}} key={v.title}>
-                        <Card>
+                        <Card onClick={() => this.handleClick(v)} >
                             <Header
                                 title={v.user}
                                 thumb={require(`../../res/images/${v.avatar}.png`)}

@@ -29,7 +29,7 @@ express依赖cookie-parser，使用npm install cookie-parser安装
 使用browser-cookies模块来操作用户的cookie
 
 #socket.io
-使用socket.io来处理实时通信
+使用socket.io来处理实时通信(npm install socket.io --save / npm install socket.io-client --save)
   socket.io是基于事件的实时双向通信库
     socket.io基于websocket协议(与ajax的http协议不同)
     前后端通过事件进行双向通信

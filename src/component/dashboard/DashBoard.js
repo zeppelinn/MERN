@@ -9,16 +9,26 @@ import Boss from '../boss/Boss';
 import Genius from '../genius/Genius';
 import My from '../my/My';
 import Msg from '../msg/Msg';
+import { getMsgList, receiveMsg } from '../../redux/chat.redux';
 
 @withRouter
 @connect(
-    state => state.user
+    state => state,
+    { getMsgList, receiveMsg }
 )
 
 export default class DashBoard extends Component {
+
+    componentDidMount = () => {
+        if (!this.props.chat.chatmsg.length) {
+            this.props.getMsgList();
+            this.props.receiveMsg();
+        }
+    }
+    
     render() {
         const {pathname} = this.props.location;
-        const type = this.props.type
+        const type = this.props.user.type
         const navList = [
             {
                 path:'/boss',
@@ -65,6 +75,7 @@ export default class DashBoard extends Component {
                                 key={v.path}
                                 path={v.path}
                                 component={v.component}
+                                
                             />
                         ))}
                     </Switch>
