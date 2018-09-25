@@ -13,6 +13,7 @@ export default class Msg extends Component {
     )
 
     render() {
+        if(!this.props.chat.chatmsg.length) return null;
         const msgGroup = {};
         this.props.chat.chatmsg.forEach(v => {
             msgGroup[v.chatid] = msgGroup[v.chatid] || [];
@@ -30,7 +31,6 @@ export default class Msg extends Component {
             <div>
                 {chatList.map(v => {
                     const lastItem = this.getLastMsg(v);
-                    console.log('create time--->', lastItem);
                     const targetId = lastItem.to === userid ? lastItem.from : lastItem.to;
                     const unreadNum = v.filter(value => !value.read && value.to === userid).length;
                     const userInfo = this.props.chat.users[targetId];
