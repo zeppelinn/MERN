@@ -24,8 +24,8 @@ export const chat = (state=initState, action) => {
             const unread = action.payload.to === action.userid ? 1 : 0
             return {...state, chatmsg:[...state.chatmsg, action.payload], unread:state.unread + unread}
         case MSG_READ:
-            
-            break;
+            const { from, num} = action.payload;
+            return {...state, chatmsg:state.chatmsg.map(v => ({...v, read:from === v.from ? true : v.read})), unread:state.unread - num}
         default:
             return state;
     }
@@ -39,11 +39,15 @@ const msgRecv = (data, userid) => {
     return {type:MSG_RECV, payload:data, userid};
 } 
 
+const msgRead = ({from, userid, num}) => {
+    return {type:MSG_READ, payload:{from, userid, num}};
+}
+
 export const receiveMsg = () => {
     return (dispatch, getState) => {
-        const userid = getState().user._id;
         socket.on('recvmsg', (data) => {
-            console.log('recv msg', data);
+			// !!!!!!!!一定要注意这个，异步获取userid，否则DashBoard里的属性还没有获取到值，getState()的值全为空，所以要放到异步处理
+            const userid = getState().user._id;
             dispatch(msgRecv(data, userid));
         })
     }
@@ -65,5 +69,17 @@ export const getMsgList = () => {
 export const sendMsg = ({from, to, msg}) => {
     return dispatch => {
         socket.emit('sendmsg', {from, to, msg});
+    }
+}
+
+export const readMsg = (from) => {
+    return (dispatch, getState) => {
+        axios.post('/user/readmsg', {from})
+            .then(res => {
+                const userid = getState().user._id;
+                if(res.status === 200 && res.data.code === 0){
+                    dispatch(msgRead({userid, from, num:res.data.num}))
+                }
+            })
     }
 }

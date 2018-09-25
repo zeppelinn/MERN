@@ -64,9 +64,24 @@ Router.get('/info', (req, res) => {
     })
 });
 
+Router.get('/delemsg', (req, res) => {
+    Chat.remove({}, (e, d) => {
+        return res.json(d);
+    })
+});
+
+Router.get('/deleuser', (req, res) => {
+    User.remove({}, (e, d) => {
+        return res.json(d);
+    })
+});
+
+
 Router.get('/getmsglist', (req, res) => {
     // 从cookie中获取当前用户信息(userid)
     const user = req.cookies.userid;
+
+    // Chat.remove({}, (e, v) => {});
 
     User.find({}, (e, userdoc) => {
         let users = {};
@@ -80,6 +95,15 @@ Router.get('/getmsglist', (req, res) => {
         })
     })
 });
+
+Router.post('/readmsg', (req, res) => {
+    const userid = req.cookies.userid;
+    const {from} = req.body
+    Chat.update({from, to:userid}, {'$set':{read:true}}, {'multi':true}, (err, doc) => {
+        if(!err) return res.json({code:0});
+        return res.json({code:1, msg:'update read failed'})
+    })
+})
 
 const md5Password = (pwd) => {
     const salt = 'no_body_loves_me-6639*503u:˙∂∫åASF††£¡33SA*^@)FHAC9943';

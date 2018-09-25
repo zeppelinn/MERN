@@ -33,8 +33,6 @@ export default class My extends Component {
                 this.props.handleLogout();
             }}
         ])
-
-
     }
 
     render() {

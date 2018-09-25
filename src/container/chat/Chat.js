@@ -9,7 +9,7 @@ import {
 } from 'antd-mobile'
 import { connect } from 'react-redux';
 import { IPADDR } from '../../config';
-import { getMsgList, sendMsg, receiveMsg } from '../../redux/chat.redux';
+import { getMsgList, sendMsg, receiveMsg, readMsg } from '../../redux/chat.redux';
 import { getChatId } from '../../util';
 
 // 前端在3000端口，服务器端口在9093，需要跨域，手动配置绑定地址
@@ -17,7 +17,7 @@ const socket =  io(`ws://${IPADDR}:9093`);
 
 @connect(
     state => state,
-    {getMsgList, sendMsg, receiveMsg}
+    {getMsgList, sendMsg, receiveMsg, readMsg}
 )
 export default class Chat extends Component {
     constructor(props){
@@ -49,10 +49,15 @@ export default class Chat extends Component {
     }
 
     componentDidMount = () => {
-        if(!this.props.chat.chatmsg.length){
+        if(!this.props.chatTarget.userList.length){
             this.props.getMsgList();
             this.props.receiveMsg();
         }
+    }
+
+    componentWillUnmount = () => {
+        const to = this.props.match.params.user;
+        this.props.readMsg(to);
     }
 
     render() {
@@ -74,16 +79,17 @@ export default class Chat extends Component {
             </div>
         )
         const chatid = getChatId(userId, this.props.user._id)
-        const chatmsgs = this.props.chat.chatmsg.filter(v => {return v.chatid === chatid})
+        const chatmsgs = this.props.chat.chatmsg.filter(v => v.chatid === chatid)
+        
         return (
             <div id='chat-page'>
                 <NavBar 
                     mode='dark'
                     icon={<Icon type='left' />}
                     onLeftClick={() => {
-
                         this.props.history.goBack();
                     }}
+                    style={{position:"fixed", zIndex:10, width:'100%'}}
                 >
                     {users[userId].name}
                 </NavBar>
@@ -102,7 +108,6 @@ export default class Chat extends Component {
                                 <Item 
                                     extra={<img src={avatar} />}
                                     className='chat-me'
-                                    
                                 >
                                     {v.content}
                                 </Item>

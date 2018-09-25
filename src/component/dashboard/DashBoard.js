@@ -18,14 +18,13 @@ import { getMsgList, receiveMsg } from '../../redux/chat.redux';
 )
 
 export default class DashBoard extends Component {
-
     componentDidMount = () => {
-        if (!this.props.chat.chatmsg.length) {
+        if (!this.props.chatTarget.userList.length) {
             this.props.getMsgList();
             this.props.receiveMsg();
         }
     }
-    
+
     render() {
         const {pathname} = this.props.location;
         const type = this.props.user.type
@@ -71,11 +70,10 @@ export default class DashBoard extends Component {
                 <div style={{marginTop:45}} >
                     <Switch>
                         {navList.map(v => (
-                            <Route 
+                            <Route
                                 key={v.path}
                                 path={v.path}
                                 component={v.component}
-                                
                             />
                         ))}
                     </Switch>
@@ -84,4 +82,4 @@ export default class DashBoard extends Component {
             </div>
         )
     }
-}
+    }
