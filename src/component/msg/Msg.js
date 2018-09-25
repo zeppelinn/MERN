@@ -18,7 +18,11 @@ export default class Msg extends Component {
             msgGroup[v.chatid] = msgGroup[v.chatid] || [];
             msgGroup[v.chatid].push(v);
         })
-        const chatList = Object.values(msgGroup);
+        const chatList = Object.values(msgGroup).sort((a, b) => {
+            const a_last = this.getLastMsg(a).create_time;
+            const b_last = this.getLastMsg(b).create_time;
+            return b_last - a_last;
+        });
         const Item = List.Item;
         const Brief = List.Item.Brief;
         const userid = this.props.user._id;
@@ -26,6 +30,7 @@ export default class Msg extends Component {
             <div>
                 {chatList.map(v => {
                     const lastItem = this.getLastMsg(v);
+                    console.log('create time--->', lastItem);
                     const targetId = lastItem.to === userid ? lastItem.from : lastItem.to;
                     const unreadNum = v.filter(value => !value.read && value.to === userid).length;
                     const userInfo = this.props.chat.users[targetId];
@@ -36,6 +41,10 @@ export default class Msg extends Component {
                             <Item 
                                 extra={<Badge text={unreadNum} overflowCount={99} />}
                                 thumb={<img src={require(`../../res/images/${avatar}.png`)} />}
+                                arrow='horizontal'
+                                onClick={() => {
+                                    this.props.history.push(`/chat/${targetId}`);
+                                }}
                                 >
                                 {lastItem.content}
                                 <Brief>{name}</Brief>

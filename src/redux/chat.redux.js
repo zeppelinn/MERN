@@ -43,7 +43,8 @@ export const receiveMsg = () => {
     return (dispatch, getState) => {
         socket.on('recvmsg', (data) => {
 			// !!!!!!!!一定要注意这个，异步获取userid，否则DashBoard里的属性还没有获取到值，getState()的值全为空，所以要放到异步处理
-			const userid = getState().user._id;
+            const userid = getState().user._id;
+            console.log('doc---->', data);
             dispatch(msgRecv(data, userid));
         })
     }
