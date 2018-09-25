@@ -64,8 +64,14 @@ Router.get('/info', (req, res) => {
     })
 });
 
-Router.get('/dele', (req, res) => {
+Router.get('/delemsg', (req, res) => {
     Chat.remove({}, (e, d) => {
+        return res.json(d);
+    })
+});
+
+Router.get('/deleuser', (req, res) => {
+    User.remove({}, (e, d) => {
         return res.json(d);
     })
 });

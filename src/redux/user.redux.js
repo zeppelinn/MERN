@@ -18,6 +18,7 @@ const initState = {
 export const user = (state = initState, action) => {
     switch (action.type) {
         case AUTH_SUCCESS:
+
             return {...state, msg:'', ...action.payload, redirectTo:getRedirectPath(action.payload)};
         case ERROR_MSG:
             return {...state, msg:action.error,};
@@ -31,7 +32,7 @@ export const user = (state = initState, action) => {
 }
 
 const authSuccess = (obj) => {
-    const {pwd, _id, ...data} = obj
+    const {pwd, ...data} = obj
     return {type:AUTH_SUCCESS, payload:data};
 }
 
@@ -55,7 +56,7 @@ export const register = ({user, pwd, repeatPwd, type}) => {
         axios.post('/user/register', {user, pwd, type})
             .then(res => {
                 if(res.status === 200 && res.data.code === 0){
-                    dispatch(authSuccess({user, pwd, type}))
+                    dispatch(authSuccess({user, pwd, type, _id:res.data.data._id}))
                 }else{
                     dispatch(errorMsg(res.data.msg))
                 }

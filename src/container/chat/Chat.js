@@ -49,7 +49,7 @@ export default class Chat extends Component {
     }
 
     componentDidMount = () => {
-        if(!this.props.chat.chatmsg.length){
+        if(!this.props.chatTarget.userList.length){
             this.props.getMsgList();
             this.props.receiveMsg();
         }
@@ -74,7 +74,8 @@ export default class Chat extends Component {
             </div>
         )
         const chatid = getChatId(userId, this.props.user._id)
-        const chatmsgs = this.props.chat.chatmsg.filter(v => {return v.chatid === chatid})
+        const chatmsgs = this.props.chat.chatmsg.filter(v => v.chatid === chatid)
+        
         return (
             <div id='chat-page'>
                 <NavBar 
