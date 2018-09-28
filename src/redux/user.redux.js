@@ -2,7 +2,6 @@ import axios from "axios";
 import { getRedirectPath } from "../util";
 
 const ERROR_MSG = 'ERROR_MSG';
-const CLEAN_STATE = 'CLEAN_STATE';
 const LOAD_DATA = 'LOAD_DATA';
 const AUTH_SUCCESS = 'AUTH_SUCCESS';
 const LOG_OUT = 'LOG_OUT';
@@ -18,7 +17,6 @@ const initState = {
 export const user = (state = initState, action) => {
     switch (action.type) {
         case AUTH_SUCCESS:
-
             return {...state, msg:'', ...action.payload, redirectTo:getRedirectPath(action.payload)};
         case ERROR_MSG:
             return {...state, msg:action.error,};

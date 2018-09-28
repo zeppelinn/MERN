@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import io from 'socket.io-client';
 import {
     List,
     InputItem,
@@ -8,12 +7,8 @@ import {
     Grid
 } from 'antd-mobile'
 import { connect } from 'react-redux';
-import { IPADDR } from '../../config';
 import { getMsgList, sendMsg, receiveMsg, readMsg } from '../../redux/chat.redux';
 import { getChatId } from '../../util';
-
-// 前端在3000端口，服务器端口在9093，需要跨域，手动配置绑定地址
-const socket =  io(`ws://${IPADDR}:9093`);
 
 @connect(
     state => state,
@@ -106,7 +101,7 @@ export default class Chat extends Component {
                         (
                             <List key={v._id} >
                                 <Item 
-                                    extra={<img src={avatar} />}
+                                    extra={<img src={avatar} alt="头像"/>}
                                     className='chat-me'
                                 >
                                     {v.content}
