@@ -81,3 +81,8 @@ websocket是双向网络通信协议，后端可以主动向前端推送数据
 4.Protals组件
 5.更好更快的服务端渲染（renderToString-->renderToNodeStream）
 6.体积更小，MIT协议(可以对源码进行使用和修改)
+
+#React16 服务端渲染
+1.之前版本的renderToString，解析为字符串
+2.新版本的renderToNodeStream解析为可读的字节流对象
+3.使用ReactDom.hydate代替render

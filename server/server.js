@@ -20,7 +20,7 @@ assethook({
 })
 // 支持jsx
 import React from 'react';
-import { renderToString } from 'react-dom/server';
+import { renderToString, renderToNodeStream } from 'react-dom/server';
 import thunk from 'redux-thunk';
 import {createStore, applyMiddleware, compose} from 'redux';
 import { Provider } from 'react-redux';
@@ -59,24 +59,21 @@ app.use(function(req, res, next){
         applyMiddleware(thunk)
     ))
     let context = {}
-    const markup = renderToString(
-        <Provider store={store}>
-            <StaticRouter
-                location={req.url}
-                context={context}
-            >
-                <App></App>
-            </StaticRouter>
-        </Provider>)
+    // const markup = renderToString(
+    //     <Provider store={store}>
+    //         <StaticRouter
+    //             location={req.url}
+    //             context={context}
+    //         >
+    //             <App></App>
+    //         </StaticRouter>
+    //     </Provider>)
     const obj = {
         '/msg':"聊天列表",
         "/boss":"招聘"
     }
-
-    // pageHtml即为public/index.html中的内容，是整个web应用的骨架
-    // 以下就是服务端渲染的内容，包括了css和js，可以用浏览器查看源代码
-    // 搜索引擎在爬网站数据的时候就能从下面爬到首页数据，增强了SEO友好性
-    const pageHtml = `
+    // 采用推流的方式
+    res.write(`
     <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -93,12 +90,51 @@ app.use(function(req, res, next){
             <noscript>
             You need to enable JavaScript to run this app.
             </noscript>
-            <div id="root">${markup}</div>
+            <div id="root">`);
+    const markupStream = renderToNodeStream(
+        <Provider store={store}>
+            <StaticRouter
+                location={req.url}
+                context={context}
+            >
+                <App></App>
+            </StaticRouter>
+        </Provider>)
+    markupStream.pipe(res, {end:false});
+    // 监听上面有没有推完
+    markupStream.on('end', () => {
+        res.write(`</div>
             <script src="/${staticPath['main.js']}" ></script>
         </body>
-        </html>
-    `
-    res.send(pageHtml)
+        </html>`)
+        res.end();
+    })
+
+    // pageHtml即为public/index.html中的内容，是整个web应用的骨架
+    // 以下就是服务端渲染的内容，包括了css和js，可以用浏览器查看源代码
+    // 搜索引擎在爬网站数据的时候就能从下面爬到首页数据，增强了SEO友好性
+    // const pageHtml = `
+    // <!DOCTYPE html>
+    //     <html lang="en">
+    //     <head>
+    //         <meta charset="utf-8">
+    //         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    //         <meta name="theme-color" content="#000000">
+    //         <meta name="keywords" content="react,redux,聊天,chat,招聘" >
+    //         <meta name="author" content="lijun,zeppelinn" >
+    //         <meta name="description" content="${obj[req.url]}" >
+    //         <link rel="stylesheet" href="/${staticPath['main.css']}" >
+    //         <title>React App</title>
+    //     </head>
+    //     <body>
+    //         <noscript>
+    //         You need to enable JavaScript to run this app.
+    //         </noscript>
+    //         <div id="root">${markup}</div>
+    //         <script src="/${staticPath['main.js']}" ></script>
+    //     </body>
+    //     </html>`
+    // res.send(pageHtml)
     // 使用path.resolve('build/index.html')是将相对路径转化成为绝对路径
     // return res.sendFile(path.resolve('build/index.html'));
 })

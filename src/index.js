@@ -16,7 +16,8 @@ const store = createStore(reducer, compose(
     window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
-ReactDom.render(
+// 如果服务端推流，这里需要用hydrate渲染
+ReactDom.hydrate(
     (<Provider store={store}>
         <BrowserRouter>
             <App></App>
