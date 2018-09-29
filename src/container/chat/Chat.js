@@ -7,6 +7,7 @@ import {
     Grid
 } from 'antd-mobile'
 import { connect } from 'react-redux';
+import QueueAnim from 'rc-queue-anim';
 import { getMsgList, sendMsg, receiveMsg, readMsg } from '../../redux/chat.redux';
 import { getChatId } from '../../util';
 
@@ -88,27 +89,29 @@ export default class Chat extends Component {
                 >
                     {users[userId].name}
                 </NavBar>
-                {chatmsgs.map(v => {
-                    const avatar = require(`../../res/images/${users[v.from].avatar}.png`)
-                    return v.from === userId ? 
-                        (
-                            <List key={v._id} >
-                                <Item thumb={avatar} >
-                                    {v.content}
-                                </Item>
-                            </List>
-                        ):
-                        (
-                            <List key={v._id} >
-                                <Item 
-                                    extra={<img src={avatar} alt="头像"/>}
-                                    className='chat-me'
-                                >
-                                    {v.content}
-                                </Item>
-                            </List>
-                        )
+                <QueueAnim duration={100} delay={100} type='alpha' >
+                    {chatmsgs.map(v => {
+                        const avatar = require(`../../res/images/${users[v.from].avatar}.png`)
+                        return v.from === userId ? 
+                            (
+                                <List key={v._id} >
+                                    <Item thumb={avatar} >
+                                        {v.content}
+                                    </Item>
+                                </List>
+                            ):
+                            (
+                                <List key={v._id} >
+                                    <Item 
+                                        extra={<img src={avatar} alt="头像"/>}
+                                        className='chat-me'
+                                    >
+                                        {v.content}
+                                    </Item>
+                                </List>
+                            )
                     })}
+                </QueueAnim>
                 <div className="stick-footer">
                     <List>
                         <InputItem

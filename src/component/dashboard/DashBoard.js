@@ -10,6 +10,7 @@ import Genius from '../genius/Genius';
 import My from '../my/My';
 import Msg from '../msg/Msg';
 import { getMsgList, receiveMsg } from '../../redux/chat.redux';
+import QueueAnim from 'rc-queue-anim';
 
 @withRouter
 @connect(
@@ -62,24 +63,24 @@ export default class DashBoard extends Component {
                 hide:false
             },
         ]
+        const NotFound = () => (
+            <h1>Page Not Found</h1>
+        )
+
+        const page = navList.find(v => v.path === pathname)
         return (
+            page ? 
             <div>
                 <NavBar className='fixed-header' mode='dark' >
                     {navList.find(v => v.path===pathname).title}
                 </NavBar>
                 <div style={{marginTop:45}} >
-                    <Switch>
-                        {navList.map(v => (
-                            <Route
-                                key={v.path}
-                                path={v.path}
-                                component={v.component}
-                            />
-                        ))}
-                    </Switch>
+                    <QueueAnim type='bottom' >
+                        <Route path={page.path} key={page.path} component={page.component}/>
+                    </QueueAnim>
                 </div>
                 <NavLinkBar data = {navList} ></NavLinkBar>
-            </div>
+            </div> : <NotFound></NotFound>
         )
     }
     }

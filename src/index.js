@@ -24,6 +24,10 @@ const store = createStore(reducer, compose(
     window.devToolsExtension ? window.devToolsExtension() : f => f
 ));
 
+const NotFound = () => (
+    <h2>Page Not Found</h2>
+)
+
 ReactDom.render(
     (<Provider store={store}>
         <BrowserRouter>
