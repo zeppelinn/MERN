@@ -75,6 +75,7 @@ export const sendMsg = ({from, to, msg}) => {
 // 使用async和await改造axios异步回调
 export const readMsg = (from) => {
     return async (dispatch, getState) => {
+        // 在async修饰的回调内部，await会保证它修饰的方法执行完毕之后才会接着往下执行
         const res = await axios.post('/user/readmsg', {from})
         const userid = getState().user._id;
         if(res.status === 200 && res.data.code === 0){

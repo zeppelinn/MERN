@@ -39,3 +39,25 @@ websocket是双向网络通信协议，后端可以主动向前端推送数据
 
 现代浏览器基本都支持websocket协议
 ![Alt text](https://github.com/zeppelinn/MERN/raw/master/Screenshots/socket通信模型.png)
+
+#项目打包编译
+1.编译打包后，生成build目录
+  npm run build
+  运行以上命令会在项目根目录下生成一个build目录，结构如下
+  .
+  ├── asset-manifest.json                   //记录打包后的js和css文件
+  ├── favicon.ico
+  ├── index.html
+  ├── manifest.json                         //项目主体配置
+  ├── service-worker.js
+  └── static
+      ├── css
+      │   ├── main.c76cf106.css
+      │   └── main.c76cf106.css.map
+      └── js
+          ├── main.9fcb9246.js
+          └── main.9fcb9246.js.map
+
+2.express中间件，拦截路由，手动渲染index.html
+  (server/server.js)
+3.将build设置为静态资源地址
