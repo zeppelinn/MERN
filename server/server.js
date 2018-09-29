@@ -13,12 +13,21 @@ const path = require('path')
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
+import csshook from 'css-modules-require-hook/preset'
+import assethook from 'asset-require-hook';
+assethook({
+    extensions:['png']
+})
 // 支持jsx
 import React from 'react';
-function App() {
-    return <h2>Server Render</h2>
-}
-console.log('App-->', App);
+import { renderToString } from 'react-dom/server';
+import thunk from 'redux-thunk';
+import {createStore, applyMiddleware, compose} from 'redux';
+import { Provider } from 'react-redux';
+import { StaticRouter } from 'react-router-dom';
+import App from '../src/app';
+import reducers from '../src/reducer'
+
 io.on(
     'connection',
     function(socket){
@@ -42,8 +51,43 @@ app.use(function(req, res, next){
         // 只要不是/user或者/static开头的，就往下走，返回渲染的页面
         return next();
     }
+
+    const store = createStore(reducers, compose(
+        applyMiddleware(thunk)
+    ))
+    let context = {}
+    const markup = renderToString(
+        <Provider store={store}>
+            <StaticRouter
+                location={req.url}
+                context={context}
+            >
+                <App></App>
+            </StaticRouter>
+        </Provider>)
+
+
+    const pageHtml = `
+    <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <meta name="theme-color" content="#000000">
+            <title>React App</title>
+        </head>
+        <body>
+            <noscript>
+            You need to enable JavaScript to run this app.
+            </noscript>
+            <div id="root">${markup}</div>
+        </body>
+        </html>
+    `
+
+    res.send(pageHtml)
     // 使用path.resolve('build/index.html')是将相对路径转化成为绝对路径
-    return res.sendFile(path.resolve('build/index.html'));
+    // return res.sendFile(path.resolve('build/index.html'));
 })
 // 将/build设置为静态资源地址
 // 在package.json的"scripts"对象中加入"server":"node server/server.js"属性，
