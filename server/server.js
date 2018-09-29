@@ -1,8 +1,10 @@
-const express = require('express');
-const userRouter = require('./user');
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const model = require('./model');
+// const express = require('express');
+// 在将node环境替换成babel-node之后，就可以使用import这样的es6语法了
+import express from 'express'
+import userRouter  from './user'
+import bodyParser  from 'body-parser'
+import cookieParser from 'cookie-parser'
+import model from './model';
 const Chat = model.getModel('chat');
 
 const app = express();
@@ -11,6 +13,12 @@ const path = require('path')
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
+// 支持jsx
+import React from 'react';
+function App() {
+    return <h2>Server Render</h2>
+}
+console.log('App-->', App);
 io.on(
     'connection',
     function(socket){

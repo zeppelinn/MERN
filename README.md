@@ -61,3 +61,9 @@ websocket是双向网络通信协议，后端可以主动向前端推送数据
 2.express中间件，拦截路由，手动渲染index.html
   (server/server.js)
 3.将build设置为静态资源地址
+
+#React服务端SSR
+  node环境使用babel-node支持jsx
+  运行npm install babel-cli --save，安装babel的命令行工具
+  将package.json中scripts对象的server属性修改为NODE_ENV=test node --exec babel-node server/server.js(定义当前环境，并将node环境修改成babel-node，使server端支持es6的语法以及jsx，为后端渲染首页提供条件))
+  在项目根目录下新建文件.babelrc，将package.json中的babel配置复制进去
