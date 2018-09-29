@@ -3,7 +3,6 @@ import Logo from '../../component/logo/logo';
 import {
     List,
     InputItem,
-    WhiteSpace,
 	Button,
 	Radio,
 	WingBlank

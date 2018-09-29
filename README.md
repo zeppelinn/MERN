@@ -39,3 +39,50 @@ websocket是双向网络通信协议，后端可以主动向前端推送数据
 
 现代浏览器基本都支持websocket协议
 ![Alt text](https://github.com/zeppelinn/MERN/raw/master/Screenshots/socket通信模型.png)
+
+#项目打包编译
+1.编译打包后，生成build目录
+  npm run build
+  运行以上命令会在项目根目录下生成一个build目录，结构如下
+  .
+  ├── asset-manifest.json                   //记录打包后的js和css文件
+  ├── favicon.ico
+  ├── index.html
+  ├── manifest.json                         //项目主体配置
+  ├── service-worker.js
+  └── static
+      ├── css
+      │   ├── main.c76cf106.css
+      │   └── main.c76cf106.css.map
+      └── js
+          ├── main.9fcb9246.js
+          └── main.9fcb9246.js.map
+
+2.express中间件，拦截路由，手动渲染index.html
+  (server/server.js)
+3.将build设置为静态资源地址
+
+#React服务端SSR
+1.node环境使用babel-node支持jsx
+  运行npm install babel-cli --save，安装babel的命令行工具
+  将package.json中scripts对象的server属性修改为NODE_ENV=test node --exec babel-node server/server.js(定义当前环境，并将node环境修改成babel-node，使server端支持es6的语法以及jsx，为后端渲染首页提供条件))
+  在项目根目录下新建文件.babelrc，将package.json中的babel配置复制进去
+
+2.设置css和图片的hook
+  npm install css-modules-require-hook --save
+  在根目录下新建钩子文件cmrh.conf.js，添加css钩子配置
+  npm install asset-require-hook --save (图片钩子)
+3.renderToString渲染html
+
+#React 16 新功能
+1.新的核心算法Fiber（重写了VultrDOM的逻辑，提升渲染速度）
+2.Render可以返回数组，字符串
+3.错误处理机制
+4.Protals组件
+5.更好更快的服务端渲染（renderToString-->renderToNodeStream）
+6.体积更小，MIT协议(可以对源码进行使用和修改)
+
+#React16 服务端渲染
+1.之前版本的renderToString，解析为字符串
+2.新版本的renderToNodeStream解析为可读的字节流对象
+3.使用ReactDom.hydate代替render
