@@ -12,8 +12,27 @@ import {
 } from 'react-router-dom';
 
 export default class App extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            hasError:false
+        }
+    }
+
+    // React 16 新特性，错误处理
+    componentDidCatch = (err, info) => {
+        this.setState({
+            hasError:true
+        })
+    }
+
     render() {
+        const PageNotFound = () => {
+            return <h1>Page Not Found</h1>
+        }
         return (
+            !this.state.hasError ? 
             <div>
                 <AuthRoute></AuthRoute>
                 <Switch>
@@ -24,7 +43,7 @@ export default class App extends Component {
                     <Route path='/chat/:user' component={Chat}/>
                     <Route component={DashBoard}/>
                 </Switch>
-            </div>
+            </div> : <PageNotFound></PageNotFound>
         )
     }
 }

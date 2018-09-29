@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {
     NavBar,
@@ -63,10 +63,6 @@ export default class DashBoard extends Component {
                 hide:false
             },
         ]
-        const NotFound = () => (
-            <h1>Page Not Found</h1>
-        )
-
         const page = navList.find(v => v.path === pathname)
         return (
             page ? 
@@ -80,7 +76,7 @@ export default class DashBoard extends Component {
                     </QueueAnim>
                 </div>
                 <NavLinkBar data = {navList} ></NavLinkBar>
-            </div> : <NotFound></NotFound>
+            </div> : <Redirect to='/msg' ></Redirect>
         )
     }
     }

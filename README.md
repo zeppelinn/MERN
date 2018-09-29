@@ -73,3 +73,11 @@ websocket是双向网络通信协议，后端可以主动向前端推送数据
   在根目录下新建钩子文件cmrh.conf.js，添加css钩子配置
   npm install asset-require-hook --save (图片钩子)
 3.renderToString渲染html
+
+#React 16 新功能
+1.新的核心算法Fiber（重写了VultrDOM的逻辑，提升渲染速度）
+2.Render可以返回数组，字符串
+3.错误处理机制
+4.Protals组件
+5.更好更快的服务端渲染（renderToString-->renderToNodeStream）
+6.体积更小，MIT协议(可以对源码进行使用和修改)
